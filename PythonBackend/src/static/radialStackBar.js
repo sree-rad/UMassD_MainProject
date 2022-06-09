@@ -7,7 +7,7 @@ const MAX_YEAR = '2020'
 const TOP_N = 50
 
 var margin = { top: 50, right: 50, bottom: 5, left: 50 },
-        svgWidth = 400, svgHeight = 400,
+        svgWidth = 300, svgHeight = 300,
         chartWidth = svgWidth,
         chartHeight = svgHeight ;
 
@@ -21,10 +21,10 @@ function drawRSB(countries, inputData) {
 
     const svg = d3.select("#radialStackBar")
         .append("svg")
-        .attr("viewBox", `${-chartWidth / 2} ${-chartHeight / 2} ${chartWidth} ${chartHeight}`)
+        .attr("viewBox", `-180 -150, 360 300`)
         .style("width", "100%")
         .style("height", "100%")
-        .style("font", "10px sans-serif");
+        .style("font", "8px sans-serif");
 
     fullData = []
     columns = ['iso_code', 'Cement', 'Coal', 'Flaring', 'Gas', 'Oil', 'Others']
@@ -96,11 +96,6 @@ function drawRSB(countries, inputData) {
 
     yAxis = g => g
         .attr("text-anchor", "middle")
-        .call(g => g.append("text")
-            .attr("y", d => -y(y.ticks(5).pop()))
-            .attr("dy", "-1em")
-            .attr("fill", "#fff")
-            .text("CO2 Emission Contribution by Industry"))
         .call(g => g.selectAll("g")
             .data(y.ticks(5).slice(1))
             .join("g")
@@ -124,7 +119,7 @@ function drawRSB(countries, inputData) {
         .selectAll("g")
         .data(columns.slice(1).reverse())
         .join("g")
-        .attr("transform", (d, i) => `translate(-40,${(i - (columns.length - 1) / 2) * 20})`)
+        .attr("transform", (d, i) => `translate(-40,${(i - (columns.length - 1) / 2) * 12})`)
         .call(g => g.append("rect")
             .attr("x", 20)
             .attr("width", 10)

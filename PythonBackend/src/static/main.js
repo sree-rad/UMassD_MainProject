@@ -2,9 +2,8 @@ var containerWidth = Math.max(document.documentElement.clientWidth, window.inner
     containerHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
 let globeVizDiv = document.querySelector('#globeViz');
-let width = globeVizDiv.offsetWidth;
-let height = globeVizDiv.offsetHeight;
-
+let width = globeVizDiv.offsetWidth-150;
+let height = width;
 
 $('.timelineIcon').click(function () {
     var div = document.getElementById('timelineIconWId');
@@ -56,7 +55,7 @@ function drawGlobe(countries, data) {
     colorScale.domain([0, maxVal]);
     const world = Globe()
         .width(width)
-        //.height(height)
+        .height(height)
         (document.getElementById('globeViz'))
         .globeImageUrl('http://cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg')
         .polygonsData(countries.features)

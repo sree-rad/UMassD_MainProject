@@ -12,7 +12,7 @@
 
     <link rel="canonical" href="https://icons.getbootstrap.com/icons/bar-chart-steps/">
 
-    
+
 
     <title>World CO2 Emissions and Correlation with Air Quality and Temperature</title>
 
@@ -21,9 +21,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"
-        integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='timeline.css') }}">
 
@@ -69,18 +66,50 @@
             height: 100%;
             font-size: 12px;
         }
+        #globeVizFlipper {
+            position: absolute;
+            padding-top: 50px;
+            padding-left: 13%;
+            z-index: 100;
+        }
     </style>
 </head>
 
 <body>
 
     <h1 class="mainHeader">World CO2 Emissions and Correlation with Air Quality and Temperature</h1>
-
+    <br />
     <div class="row">
-        <div class="col-6" id="globeViz"></div>
-        <div class="col-6" id="radialStackBar"></div>
+        <div class="col-6">
+            <div id="globeVizFlipper" class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                <label class="btn btn-outline-primary" for="btnradio1">Single Select Mode</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio2">Multi Select Mode</label>
+            </div>
+            <div id="globeViz"></div>
+        </div>
+        <div class="col-6">
+
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="radialStackBar-tab" data-bs-toggle="tab"
+                        data-bs-target="#radialStackBar" type="button" role="tab" aria-controls="radialStackBar"
+                        aria-selected="true">CO2 Contribution by Country</button>
+                    <button class="nav-link" id="lineRace-tab" data-bs-toggle="tab" data-bs-target="#lineRace"
+                        type="button" role="tab" aria-controls="lineRace" aria-selected="false">CO2 Emission
+                        Trend</button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="radialStackBar" role="tabpanel"
+                    aria-labelledby="radialStackBar-tab"></div>
+                <div class="tab-pane fade" id="lineRace" role="tabpanel" aria-labelledby="lineRace-tab">...</div>
+            </div>
+        </div>
     </div>
-    
+
     <div class="timelineIcon">
         <img src="{{ url_for('static', filename='road-map-icon-14476.png') }}" alt="Road to zero emissions">
     </div>
@@ -90,13 +119,15 @@
             <div>
                 <div class="main-timeline">
                     <h2 style="text-align: center">Roadmap to Zero Emissions</h2>
-                    <a href="https://www.un.org/en/climatechange/net-zero-coalition" style="float:right">(Source: un.org)</a>
+                    <a href="https://www.un.org/en/climatechange/net-zero-coalition" style="float:right">(Source:
+                        un.org)</a>
                     <div class="timeline">
                         <span href="#" class="timeline-content">
                             <div class="timeline-year">2015</div>
                             <p class="description">
-                                196 countries adopted the historic Paris Agreement to reduce global warming and build 
-                                resilience to climate change. Its overall goal: limit warming to no more than 1.5 degrees Celsius.
+                                196 countries adopted the historic Paris Agreement to reduce global warming and build
+                                resilience to climate change. Its overall goal: limit warming to no more than 1.5
+                                degrees Celsius.
                             </p>
                         </span>
                     </div>
@@ -104,9 +135,12 @@
                         <span href="#" class="timeline-content">
                             <div class="timeline-year">2016</div>
                             <p class="description">
-                                Parties to the agreement began submitting climate action plans known as nationally determined 
-                                contributions (NDCs). Initial commitments, even if fully implemented, would only be enough to 
-                                slow warming to 3 degrees. Urgent calls for action and ambition gained momentum as the plans 
+                                Parties to the agreement began submitting climate action plans known as nationally
+                                determined
+                                contributions (NDCs). Initial commitments, even if fully implemented, would only be
+                                enough to
+                                slow warming to 3 degrees. Urgent calls for action and ambition gained momentum as the
+                                plans
                                 would not stop catastrophic impacts.
                             </p>
                         </span>
@@ -115,8 +149,10 @@
                         <span href="#" class="timeline-content">
                             <div class="timeline-year">2020</div>
                             <p class="description">
-                                In the lead-up to the COP26 climate talks, countries have begun revising their NDCs to strengthen 
-                                climate action. With science affirming a shrinking window of opportunity, the plans must include 
+                                In the lead-up to the COP26 climate talks, countries have begun revising their NDCs to
+                                strengthen
+                                climate action. With science affirming a shrinking window of opportunity, the plans must
+                                include
                                 urgent actions to cut carbon emissions and reach net zero by 2050.
                             </p>
                         </span>
@@ -125,7 +161,8 @@
                         <span href="#" class="timeline-content">
                             <div class="timeline-year">2030</div>
                             <p class="description">
-                                To keep warming to 1.5 degrees, countries must cut emissions by at least 45 per cent compared to 2010 levels.
+                                To keep warming to 1.5 degrees, countries must cut emissions by at least 45 per cent
+                                compared to 2010 levels.
                             </p>
                         </span>
                     </div>
@@ -143,7 +180,7 @@
     </div>
     <script src="https://d3js.org/topojson.v1.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    
+
     <script src="{{ url_for('static', filename='radialStackBar.js') }}"></script>
     <script src="{{ url_for('static', filename='main.js') }}"></script>
 
