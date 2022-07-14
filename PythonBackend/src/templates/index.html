@@ -14,7 +14,7 @@
 
 
 
-    <title>World CO2 Emissions and Correlation with Air Quality and Temperature</title>
+    <title>World CO2 Emissions and Correlation with Temperature</title>
 
     <script src="http://unpkg.com/globe.gl"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -72,12 +72,24 @@
             padding-left: 13%;
             z-index: 100;
         }
+
+        #multimode_detail, #singlemode_detail {
+            display: none
+        }
+
+        #lineRace, #stackedAreaChart {
+            height: 700px;
+            width: 700px;
+            min-width: 500px;
+            min-height: 500px;
+        }
+
     </style>
 </head>
 
 <body>
 
-    <h1 class="mainHeader">World CO2 Emissions and Correlation with Air Quality and Temperature</h1>
+    <h1 class="mainHeader">World CO2 Emissions and Correlation with Temperature</h1>
     <br />
     <div class="row">
         <div class="col-6">
@@ -92,22 +104,43 @@
         </div>
         <div class="col-6">
 
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="radialStackBar-tab" data-bs-toggle="tab"
-                        data-bs-target="#radialStackBar" type="button" role="tab" aria-controls="radialStackBar"
-                        aria-selected="true">CO2 Contribution by Country</button>
-                    <button class="nav-link" id="lineRace-tab" data-bs-toggle="tab" data-bs-target="#lineRace"
-                        type="button" role="tab" aria-controls="lineRace" aria-selected="false">CO2 Emission
-                        Trend</button>
+            <div id="multimode_detail">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="radialStackBar-tab" data-bs-toggle="tab"
+                            data-bs-target="#radialStackBar" type="button" role="tab" aria-controls="radialStackBar"
+                            aria-selected="true">CO2 Contribution by Country</button>
+                        <button class="nav-link" id="lineRace-tab" data-bs-toggle="tab" data-bs-target="#lineRace"
+                            type="button" role="tab" aria-controls="lineRace" aria-selected="false">CO2 Emission
+                            Trend</button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="radialStackBar" role="tabpanel" aria-labelledby="radialStackBar-tab"></div>
+                    <div class="tab-pane fade" id="lineRace" role="tabpanel" aria-labelledby="lineRace-tab"></div>
                 </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="radialStackBar" role="tabpanel"
-                    aria-labelledby="radialStackBar-tab"></div>
-                <div class="tab-pane fade" id="lineRace" role="tabpanel" aria-labelledby="lineRace-tab">...</div>
             </div>
+
+            <div id="singlemode_detail">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab1" role="tablist">
+                        <button class="nav-link active" id="stackedAreaChart-tab" data-bs-toggle="tab"
+                            data-bs-target="#stackedAreaChart" type="button" role="tab" aria-controls="stackedAreaChart"
+                            aria-selected="true">CO2 Contribution trend by Sectors</button>
+                        <button class="nav-link" id="lineChart-tab" data-bs-toggle="tab" data-bs-target="#lineChart"
+                            type="button" role="tab" aria-controls="lineChart" aria-selected="false">CO2 Emission
+                            Correlation with Temperature</button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="stackedAreaChart" role="tabpanel"
+                        aria-labelledby="stackedAreaChart-tab"></div>
+                    <div class="tab-pane fade" id="lineChart" role="tabpanel" aria-labelledby="lineChart-tab">...</div>
+                </div>
+            </div>
+
         </div>
+
     </div>
 
     <div class="timelineIcon">
@@ -180,8 +213,11 @@
     </div>
     <script src="https://d3js.org/topojson.v1.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="{{ url_for('static', filename='echarts.min.js') }}"></script>
 
+    <script src="{{ url_for('static', filename='lineRace.js') }}"></script>
     <script src="{{ url_for('static', filename='radialStackBar.js') }}"></script>
+    <script src="{{ url_for('static', filename='stackedArea.js') }}"></script>
     <script src="{{ url_for('static', filename='main.js') }}"></script>
 
 </body>
