@@ -5,6 +5,7 @@ let globeVizDiv = document.querySelector('#globeViz');
 let width = globeVizDiv.offsetWidth - 150;
 let height = width;
 let isSingleMode = true
+var selectedPolygons = new Set();
 
 $('.timelineIcon').click(function () {
     var div = document.getElementById('timelineIconWId');
@@ -79,7 +80,7 @@ Promise.all([
 
 function drawGlobe(countries, data) {
 
-    var selectedPolygons = new Set();
+    
 
     function isSelectedPolygon(polygon) {
         return selectedPolygons.filter(e => e === polygon).length > 0;
@@ -157,7 +158,7 @@ function drawGlobe(countries, data) {
 
         world
             .polygonAltitude(d => d === polygon || selectedPolygons.has(d) ? 0.12 : 0.06)
-            .polygonCapColor(d => selectedPolygons.has(d) ? 'steelblue' : colorScale(getVal(d)))
+            .polygonCapColor(d => selectedPolygons.has(d) ? 'steelblue': colorScale(getVal(d, data)))
 
         selectedCountries = []
         
