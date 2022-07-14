@@ -2,12 +2,40 @@ var containerWidth = Math.max(document.documentElement.clientWidth, window.inner
     containerHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
 let globeVizDiv = document.querySelector('#globeViz');
-let width = globeVizDiv.offsetWidth-150;
+let width = globeVizDiv.offsetWidth - 150;
 let height = width;
+let isSingleMode = true
 
 $('.timelineIcon').click(function () {
     var div = document.getElementById('timelineIconWId');
     div.style.display = div.style.display == "block" ? "none" : "block"
+});
+
+function hideElement(eid) {
+    var link = document.getElementById(eid);
+    link.style.display = 'none'
+}
+
+function showElement(eid) {
+    var link = document.getElementById(eid);
+    link.style.display = 'block'
+}
+
+$(document).ready(function(){
+    $(".btn").click(function(e){
+        if(e.target.htmlFor === 'btnradio1') {
+            isSingleMode = true
+            hideElement('multimode_detail');
+            showElement('singlemode_detail')
+
+        } else if(e.target.htmlFor === 'btnradio2') {
+            isSingleMode = false
+            hideElement('singlemode_detail');
+            showElement('multimode_detail')
+        }
+
+        selectedPolygons = new Set();
+    });
 });
 
 const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
@@ -50,6 +78,13 @@ Promise.all([
 })
 
 function drawGlobe(countries, data) {
+
+    var selectedPolygons = new Set();
+
+    function isSelectedPolygon(polygon) {
+        return selectedPolygons.filter(e => e === polygon).length > 0;
+    }
+
     //const maxVal = Math.max(...countries.features.map(getVal));
     const maxVal = Math.max(...data.filter(c => c.year == MAX_YEAR).map(c => c.co2_per_capita));
     colorScale.domain([0, maxVal]);
@@ -65,31 +100,79 @@ function drawGlobe(countries, data) {
         .polygonStrokeColor(() => '#111');
 
     world.polygonLabel(({ properties: d }) => {
-        //console.log(d.ADMIN)
         co2Data = data.filter(c => c.country === transformCountryName(d.ADMIN))
         maxYear = Math.max(...co2Data.map(o => o.year))
         co2PerCapita = co2Data.filter(c => c.year == maxYear)
             .map(c => c.co2_per_capita)
 
-        //console.log(co2Data)
-        //console.log(co2PerCapita)
         return buildCountrySummaryPolygonLabel(d.ADMIN, d.ISO_A2, d.GDP_MD_EST, d.POP_EST, co2PerCapita)
-    }
-    )
-        .onPolygonHover(hoverD => world
-            .polygonAltitude(d => d === hoverD ? 0.12 : 0.06)
-            .polygonCapColor(d => d === hoverD ? colorScale(getVal(d)) : colorScale(getVal(d)))
-        )
-        .polygonsTransitionDuration(300)
-        (document.getElementById('globeViz'))
+    }).onPolygonHover(polygon => 
+        world
+            .polygonAltitude(d => d === polygon || selectedPolygons.has(d) ? 0.12 : 0.06)
+    ).onPolygonClick( (polygon, event) => { 
+        
+        if(isSingleMode) {
+            selectedPolygons = new Set();
+            selectedPolygons.add(polygon);
+
+            stackedAreaData = {
+                year: [],
+                Others: [],
+                Oil: [],
+                Gas: [],
+                Flaring: [],
+                Coal: [],
+                Cement: []
+            }
+
+            //console.log(data.filter(c => c.country === transformCountryName(polygon.properties.ADMIN)))
+            data.filter(c => c.country === transformCountryName(polygon.properties.ADMIN) && parseInt(c.year) >= 1980)
+                .map(c => {
+                    stackedAreaData.year.push(parseInt(c.year));
+                    stackedAreaData.Others.push(parseFloat(c.other_co2_per_capita));
+                    stackedAreaData.Oil.push(parseFloat(c.oil_co2_per_capita));
+                    stackedAreaData.Gas.push(parseFloat(c.gas_co2_per_capita));
+                    stackedAreaData.Flaring.push(parseFloat(c.flaring_co2_per_capita));
+                    stackedAreaData.Coal.push(parseFloat(c.coal_co2_per_capita));
+                    stackedAreaData.Cement.push(parseFloat(c.cement_co2_per_capita));
+                }
+            )
+
+            // console.log(stackedAreaData)
+            // console.log(Object.keys(stackedAreaData))
+
+            drawStackedArea(stackedAreaData);
+
+        } else {
+
+            if(selectedPolygons.has(polygon)) {
+                selectedPolygons.delete(polygon);
+            } else {
+                selectedPolygons.add(polygon);
+            }
+
+        }
+        
+        // console.log(selectedPolygons)
+
+        world
+            .polygonAltitude(d => d === polygon || selectedPolygons.has(d) ? 0.12 : 0.06)
+            .polygonCapColor(d => selectedPolygons.has(d) ? 'steelblue' : colorScale(getVal(d)))
+
+        selectedCountries = []
+        
+        selectedPolygons.forEach(d => {selectedCountries.push(d.properties.ISO_A3)})
+        //console.log(selectedCountries)
+        drawLineRace(data, selectedCountries)
+            
+    }).polygonsTransitionDuration(300)
+    //(document.getElementById('globeViz'))
 
     window.addEventListener('resize', (event) => {
-        //console.log(event)
 
         let width = globeVizDiv.offsetWidth;
         let height = globeVizDiv.offsetHeight;
 
         world.width([width])
-        //world.height([event.target.innerHeight])
     });
 };
