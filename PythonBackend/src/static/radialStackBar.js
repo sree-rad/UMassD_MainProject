@@ -6,15 +6,43 @@ outerRadius = Math.min(width, height) / 2
 const MAX_YEAR = '2020'
 const TOP_N = 50
 
+var mouseX;
+var mouseY;
+
+$(document).mousemove( function(e) {
+   //mouseX = e.pageX; 
+   //mouseY = e.pageY;
+   var bodyOffsets = document.body.getBoundingClientRect();
+   mouseX = e.pageX - bodyOffsets.left;
+   mouseY = e.pageY - bodyOffsets.top;
+});
+
 var margin = { top: 50, right: 50, bottom: 5, left: 50 },
-        svgWidth = 300, svgHeight = 300,
-        chartWidth = svgWidth,
-        chartHeight = svgHeight ;
+    svgWidth = 300, svgHeight = 300,
+    chartWidth = svgWidth,
+    chartHeight = svgHeight;
 
 function parseFloatCustom(val) {
-    if(val == undefined || val == "") return 0;
-    
+    if (val == undefined || val == "") return 0;
+
     return parseFloat(val)
+}
+
+function buildDataForPieChart(inData) {
+
+    outData = [
+        {"name": "Cement", "value": parseFloatCustom(inData.Cement)},
+        {"name": "Coal", "value": parseFloatCustom(inData.Coal)},
+        {"name": "Flaring", "value": parseFloatCustom(inData.Flaring)},
+        {"name": "Gas", "value": parseFloatCustom(inData.Gas)},
+        {"name": "Oil", "value": parseFloatCustom(inData.Oil)},
+        {"name": "Others", "value": parseFloatCustom(inData.Others)}
+    ]
+
+    drawPieChart(outData)
+    $(".pieChartDivClass").show();
+    $(".pieChartCountryHeader").html("<b>"+ inData.country +"</b><div id='close'><a href='#' onclick='hide(pieChartDivId);'>X</a></div>");
+    $('.pieChartDivClass').css({'top':mouseY,'left':mouseX}).fadeIn('slow');
 }
 
 function drawRSB(countries, inputData) {
@@ -29,27 +57,27 @@ function drawRSB(countries, inputData) {
     fullData = []
     columns = ['iso_code', 'Cement', 'Coal', 'Flaring', 'Gas', 'Oil', 'Others']
     inputData.filter(d => d.year == MAX_YEAR && d.iso_code != "" && d.iso_code != "OWID_WRL")
-    .forEach(d => {
+        .forEach(d => {
 
-        record = {}
-        record.iso_code = d.iso_code
-        record.country = d.country
-        record.Cement = d.cement_co2_per_capita
-        record.Coal = d.coal_co2_per_capita
-        record.Flaring = d.flaring_co2_per_capita
-        record.Gas = d.gas_co2_per_capita
-        record.Oil = d.oil_co2_per_capita
-        record.Others = d.other_co2_per_capita
-        
-        record.total = parseFloatCustom(record['Cement']) +
-            parseFloatCustom(record['Coal']) + parseFloatCustom(record['Flaring']) +
-            parseFloatCustom(record['Gas']) + parseFloatCustom(record['Oil']) +
-            parseFloatCustom(record['Others']);
-        
+            record = {}
+            record.iso_code = d.iso_code
+            record.country = d.country
+            record.Cement = d.cement_co2_per_capita
+            record.Coal = d.coal_co2_per_capita
+            record.Flaring = d.flaring_co2_per_capita
+            record.Gas = d.gas_co2_per_capita
+            record.Oil = d.oil_co2_per_capita
+            record.Others = d.other_co2_per_capita
+
+            record.total = parseFloatCustom(record['Cement']) +
+                parseFloatCustom(record['Coal']) + parseFloatCustom(record['Flaring']) +
+                parseFloatCustom(record['Gas']) + parseFloatCustom(record['Oil']) +
+                parseFloatCustom(record['Others']);
+
             fullData.push(record)
-    });
+        });
 
-    data = fullData.sort(function(a, b){return a.total - b.total}).reverse().slice(0, TOP_N)
+    data = fullData.sort(function (a, b) { return a.total - b.total }).reverse().slice(0, TOP_N)
 
     data.sort(() => Math.random() - 0.5)
 
@@ -90,8 +118,8 @@ function drawRSB(countries, inputData) {
                 .attr("transform", d => (x(d.iso_code) + x.bandwidth() / 2 + Math.PI / 2) % (2 * Math.PI) < Math.PI
                     ? "rotate(90)translate(0,12)"
                     : "rotate(-90)translate(0,-9)")
-                    .attr("fill", "#fff")
-                    .attr("font-size", ".4em")
+                .attr("fill", "#fff")
+                .attr("font-size", ".4em")
                 .text(d => d.iso_code)))
 
     yAxis = g => g
@@ -142,7 +170,9 @@ function drawRSB(countries, inputData) {
         .selectAll("path")
         .data(d => d)
         .join("path")
-        .attr("d", arc);
+        .attr("d", arc)
+        .on("click", (e,d) => buildDataForPieChart(d.data))
+        .on("mouseenter", (e,d) => buildDataForPieChart(d.data));
 
     svg.append("g")
         .call(xAxis);
@@ -152,6 +182,4 @@ function drawRSB(countries, inputData) {
 
     svg.append("g")
         .call(legend);
-
-    
 }

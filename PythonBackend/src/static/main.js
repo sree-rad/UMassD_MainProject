@@ -5,7 +5,11 @@ let globeVizDiv = document.querySelector('#globeViz');
 let width = globeVizDiv.offsetWidth - 150;
 let height = width;
 let isSingleMode = true
-var selectedPolygons = new Set();
+var selectedPolygons = new Set(); 
+
+function hide(hideID) {
+    hideID.style.display = "none"; 
+}
 
 $('.timelineIcon').click(function () {
     var div = document.getElementById('timelineIconWId');
@@ -40,8 +44,6 @@ $(document).ready(function(){
 });
 
 const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
-// GDP per capita (avoiding countries with small pop)
-// const getVal = feat => feat.properties.GDP_MD_EST / Math.max(1e5, feat.properties.POP_EST);
 
 function transformCountryName(country) {
     if (country === 'United States of America')
@@ -78,15 +80,12 @@ Promise.all([
     drawRSB(countries, data);
 })
 
+function isSelectedPolygon(polygon) {
+    return selectedPolygons.filter(e => e === polygon).length > 0;
+}
+
 function drawGlobe(countries, data) {
 
-    
-
-    function isSelectedPolygon(polygon) {
-        return selectedPolygons.filter(e => e === polygon).length > 0;
-    }
-
-    //const maxVal = Math.max(...countries.features.map(getVal));
     const maxVal = Math.max(...data.filter(c => c.year == MAX_YEAR).map(c => c.co2_per_capita));
     colorScale.domain([0, maxVal]);
     const world = Globe()
@@ -126,7 +125,6 @@ function drawGlobe(countries, data) {
                 Cement: []
             }
 
-            //console.log(data.filter(c => c.country === transformCountryName(polygon.properties.ADMIN)))
             data.filter(c => c.country === transformCountryName(polygon.properties.ADMIN) && parseInt(c.year) >= 1980)
                 .map(c => {
                     stackedAreaData.year.push(parseInt(c.year));
@@ -139,41 +137,29 @@ function drawGlobe(countries, data) {
                 }
             )
 
-            // console.log(stackedAreaData)
-            // console.log(Object.keys(stackedAreaData))
-
             drawStackedArea(stackedAreaData);
 
         } else {
-
             if(selectedPolygons.has(polygon)) {
                 selectedPolygons.delete(polygon);
             } else {
                 selectedPolygons.add(polygon);
             }
-
         }
-        
-        // console.log(selectedPolygons)
 
         world
             .polygonAltitude(d => d === polygon || selectedPolygons.has(d) ? 0.12 : 0.06)
             .polygonCapColor(d => selectedPolygons.has(d) ? 'steelblue': colorScale(getVal(d, data)))
 
         selectedCountries = []
-        
         selectedPolygons.forEach(d => {selectedCountries.push(d.properties.ISO_A3)})
-        //console.log(selectedCountries)
         drawLineRace(data, selectedCountries)
             
     }).polygonsTransitionDuration(300)
-    //(document.getElementById('globeViz'))
 
     window.addEventListener('resize', (event) => {
-
         let width = globeVizDiv.offsetWidth;
         let height = globeVizDiv.offsetHeight;
-
         world.width([width])
     });
 };

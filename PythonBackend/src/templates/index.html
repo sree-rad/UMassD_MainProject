@@ -77,11 +77,57 @@
             display: none
         }
 
-        #lineRace, #stackedAreaChart {
+        #stackedAreaChart {
             height: 700px;
-            width: 700px;
+            width: 90%;
             min-width: 500px;
             min-height: 500px;
+            padding-top: 20px;
+        }
+
+        #lineRace {
+            height: 700px;
+            width: 900px;
+            min-width: 500px;
+            min-height: 500px;
+            padding-top: 20px;
+        }
+
+        .pieChartDivClass {
+            background-color: #000011;
+            height: 300px;
+            width: 300px;
+            min-width: 100px;
+            min-width: 100px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 20px;
+            text-align: center;
+            display: none;
+            position: absolute;
+        }
+
+        #pieChart {
+            height: 300px;
+            width: 300px;
+            min-width: 100px;
+            min-width: 100px;
+        }
+
+        #close {
+            float: right;
+            width: 30px;
+            height: 20px;
+            text-align: center;
+            color: #fff;
+            padding-bottom: 10px;
+        }
+        .pieChartDivClass a {
+            color: #FFFFFF;
+            text-decoration: none;
+        }
+        .pieChartDivClass a:hover {
+            text-decoration:underline;
         }
 
     </style>
@@ -89,7 +135,7 @@
 
 <body>
 
-    <h1 class="mainHeader">World CO2 Emissions and Correlation with Temperature</h1>
+    <h1 class="mainHeader">CO2 Emission Trend by Country and Contribution by Various Sectors</h1>
     <br />
     <div class="row">
         <div class="col-6">
@@ -109,7 +155,7 @@
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <button class="nav-link active" id="radialStackBar-tab" data-bs-toggle="tab"
                             data-bs-target="#radialStackBar" type="button" role="tab" aria-controls="radialStackBar"
-                            aria-selected="true">CO2 Contribution by Country</button>
+                            aria-selected="true">CO2 Contribution by Sector from Top 50 Countries</button>
                         <button class="nav-link" id="lineRace-tab" data-bs-toggle="tab" data-bs-target="#lineRace"
                             type="button" role="tab" aria-controls="lineRace" aria-selected="false">CO2 Emission
                             Trend</button>
@@ -127,15 +173,11 @@
                         <button class="nav-link active" id="stackedAreaChart-tab" data-bs-toggle="tab"
                             data-bs-target="#stackedAreaChart" type="button" role="tab" aria-controls="stackedAreaChart"
                             aria-selected="true">CO2 Contribution trend by Sectors</button>
-                        <button class="nav-link" id="lineChart-tab" data-bs-toggle="tab" data-bs-target="#lineChart"
-                            type="button" role="tab" aria-controls="lineChart" aria-selected="false">CO2 Emission
-                            Correlation with Temperature</button>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="stackedAreaChart" role="tabpanel"
                         aria-labelledby="stackedAreaChart-tab"></div>
-                    <div class="tab-pane fade" id="lineChart" role="tabpanel" aria-labelledby="lineChart-tab">...</div>
                 </div>
             </div>
 
@@ -211,10 +253,17 @@
             </div>
         </div>
     </div>
+
+    <div class="pieChartDivClass" id="pieChartDivId">
+        <div class="pieChartCountryHeader"></div>
+        <div class="pieChartCountryDetail" id="pieChart"></div>
+    </div>
+
     <script src="https://d3js.org/topojson.v1.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="{{ url_for('static', filename='echarts.min.js') }}"></script>
+    <script src="https://fastly.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
 
+    <script src="{{ url_for('static', filename='pieChart.js') }}"></script>
     <script src="{{ url_for('static', filename='lineRace.js') }}"></script>
     <script src="{{ url_for('static', filename='radialStackBar.js') }}"></script>
     <script src="{{ url_for('static', filename='stackedArea.js') }}"></script>

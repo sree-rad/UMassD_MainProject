@@ -2,6 +2,8 @@ var myStackedAreaChartDom = document.getElementById('stackedAreaChart');
 var myStackedAreaChart = echarts.init(myStackedAreaChartDom, 'dark');
 var myStackedAreaOption;
 
+window.addEventListener('resize', myStackedAreaChart.resize);
+
 function drawStackedArea(chartData) {
 
   myStackedAreaOption = {
@@ -109,7 +111,7 @@ function drawStackedArea(chartData) {
       }
     ]
   };
-  
+
   myStackedAreaOption && myStackedAreaChart.setOption(myStackedAreaOption);
 
 }
