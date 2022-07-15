@@ -6,7 +6,7 @@ var pieChartOption;
 function drawPieChart(data) {
     pieChartOption = {
         color: ["#FFBF00", "#40E0D0", "#DE3163", "#6495ED", "#FF7F50", "#CCCCFF"],
-        backgroundColor: '#000011',
+        backgroundColor: '#0a0a2b',
         tooltip: {
           trigger: 'item'
         },

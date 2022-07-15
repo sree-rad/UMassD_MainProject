@@ -17,6 +17,51 @@ $(document).mousemove( function(e) {
    mouseY = e.pageY - bodyOffsets.top;
 });
 
+$('#globeInfo').click(d => {
+    $("#infoDiv").show();
+    $("#info").html(`
+        <H3>Purpose</H3>
+        <p>Each country on the globe is colored using a gradient color scheme which assigns ligher 
+        colors to those countries having less CO2 emission per capita and darker shared as the CO2 emission per capita increases.</p>
+        <H3>Operations on Globe</H3>
+        <p>Users can <strong>click, rotate, zoom and select</strong> countries on the globe</p>
+        <H3>Modes of operation</H3>
+        <ul>
+        <li><strong>Single Select Mode</strong> - allows users to select only one country at a time</li>
+        <li><strong>Multi Select Mode</strong> - allows users to select multiple countries at a time</li>
+        </ul>
+    `);
+    $('#infoDiv').css({'top':mouseY,'left':mouseX+30}).fadeIn('slow');
+});
+
+$('#singleModeInfo').click(d => {
+    $("#infoDiv").show();
+    $("#info").html(`
+        <H3>Purpose</H3>
+        <p>This visualization provides an easy way to understand the trend of the contribution of CO2 by 
+        various sectors of the selected country.</p>
+        <H3>Allowed operations</H3>
+        <p>Users can <strong>select, deselect sectors and hover</strong> to see details.</p>
+    `);
+    $('#infoDiv').css({'top':mouseY+30,'left':mouseX-250}).fadeIn('slow');
+});
+
+$('#multiModeInfo').click(d => {
+    $("#infoDiv").show();
+    $("#info").html(`
+        <H3>Purpose</H3>
+        <p>Radial Stacked bar chart depicts CO2 Contribution by various sector from the top 50 contributing countries. </p>
+        <p>CO2 Emission trend shows line charts representing the contribution of CO2 by a country over time. 
+        Users can select multiple countries from the globe to compare the contribution levels.</p>
+        <H3>Allowed operations</H3>
+        <ul>
+        <li><strong>Radial Stacked bar chart</strong> - allows users to hover to see a pie chart of the CO2 contribution by the selected country.</li>
+        <li><strong>CO2 Emission trend chart</strong> - allows users to <strong>hover</strong> to see details</li>
+        </ul>
+    `);
+    $('#infoDiv').css({'top':mouseY+30,'left':mouseX-485}).fadeIn('slow');
+});
+
 var margin = { top: 50, right: 50, bottom: 5, left: 50 },
     svgWidth = 300, svgHeight = 300,
     chartWidth = svgWidth,
