@@ -1,19 +1,12 @@
-# Correlation of the Happiness Index with Homicide Rates
+# CO2 Emission Trend by Country and Contribution by Various Sectors
 
-The world happiness index already incorporates data from many categories into its rankings. 
-We were interested in how a data category not already incorporated into the rankings compared to the happiness score. The homicide rates seemed like an appropriate variable that fit this criteria. 
-The initial thought is that a country with a higher happiness score would have a lower homicide rate, but does this expected relationship hold up?
+This project aims to provide visualizations to users, using which users can understand the current state and trend of CO2 emissions by various countries across globe. It provides details on the contribution of each country to the global CO2 emission and various sub factors which contribute to the total emission by country. These visualizations could help users in identifying the sectors where corrections are required and open up areas for further study and improvements.
 
 ## Team Members
 
-Data Visualization Project for Group 8.
-
-Amy Westell
-
 Sreekanth Radhakrishnan
 
-Gopi Kirshna Vajrala
-
+Mentor: Amir Akhavan
 
 ## Installation
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install dependencies of this project.
@@ -33,8 +26,6 @@ python src/AppInit.py
 Use the browser to access the hosted web page [web page](http://127.0.0.1:5000/) to access this project.
 
 A live hosted application is available at [Demo](http://sreekanthr.pythonanywhere.com/).
-
-<img src="./pic.jpg" width=450px/>
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
